@@ -136,6 +136,8 @@ function definePoperties() {
   });
 }
 
+//tests
+
 function loadCurrentSong() {
   heading.textContent = app.getSong.name;
   cdThumb.style.backgroundImage = `url(${app.getSong.img})`;
