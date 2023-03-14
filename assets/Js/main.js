@@ -28,6 +28,7 @@ const PLAYER_STORAGE = "F8__PLAYER";
 10. Play song khi click vào danh sách
 11. Hiện ra thông báo bài hát*/
 let currentIndex = 0;
+let isPlaying = false;
 const app = {
   song: [
     {
@@ -104,8 +105,27 @@ function handleEvent() {
   };
 
   playBtn.onclick = () => {
-    player.classList.toggle("playing");
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play();
+    }
   };
+
+  audio.onplay = () => {
+    isPlaying = true;
+    player.classList.add("playing");
+    console.log("Play");
+  };
+
+  audio.onpause = () => {
+    isPlaying = false;
+    player.classList.remove("playing");
+    console.log("pause");
+  };
+
+  //tua thanh progress
+  audio.ontimeupdate = () => {};
 }
 
 function definePoperties() {
@@ -121,7 +141,6 @@ function loadCurrentSong() {
   cdThumb.style.backgroundImage = `url(${app.getSong.img})`;
   audio.src = app.getSong.path;
 }
-
 function start() {
   renderSong();
   handleEvent();
