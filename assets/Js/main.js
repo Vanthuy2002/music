@@ -27,12 +27,12 @@ const PLAYER_STORAGE = "F8__PLAYER";
 9. Đảm bảo song được active luôn hiện trên views UI
 10. Play song khi click vào danh sách
 11. Hiện ra thông báo bài hát*/
-
+let currentIndex = 0;
 const app = {
   song: [
     {
       name: "Biết Ông Thương Không",
-      singer: "Thủy Nguyễn",
+      singer: "Singer 1",
       path: "./assets/music/BIẾT ÔNG THƯƠNG KHÔNG.mp3",
       img: "./assets/img/nn.jpg",
     },
@@ -74,3 +74,59 @@ const app = {
     },
   ],
 };
+
+//render song ra views UI
+function renderSong() {
+  let output = app.song.map((sing) => {
+    return `<div class='song'>
+    <div class="thumb" style="background-image: url('${sing.img}')" >
+    </div>
+    <div class="body">
+      <h3 class="title">${sing.name}</h3>
+      <p class="author">${sing.singer}</p>
+    </div>
+    <div class="option">
+      <i class="fas fa-ellipsis-h"></i>
+    </div>
+  </div>`;
+  });
+  playList.innerHTML = output.join("");
+}
+
+//handle event
+function handleEvent() {
+  let cdWidth = cd.offsetWidth;
+  document.onscroll = () => {
+    let scroll = window.scrollY;
+    let newWidth = cdWidth - scroll;
+    cd.style.width = newWidth > 0 ? `${newWidth}px` : 0;
+    cd.style.opacity = newWidth / cdWidth;
+  };
+
+  playBtn.onclick = () => {
+    player.classList.toggle("playing");
+  };
+}
+
+function definePoperties() {
+  Object.defineProperty(app, "getSong", {
+    get() {
+      return app.song[currentIndex];
+    },
+  });
+}
+
+function loadCurrentSong() {
+  heading.textContent = app.getSong.name;
+  cdThumb.style.backgroundImage = `url(${app.getSong.img})`;
+  audio.src = app.getSong.path;
+}
+
+function start() {
+  renderSong();
+  handleEvent();
+  definePoperties();
+  loadCurrentSong();
+}
+
+start();
